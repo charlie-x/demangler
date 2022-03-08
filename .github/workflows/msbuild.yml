@@ -26,7 +26,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
       
     - name: Install Windows SDK 10.0.18362.0 
-      run: choco install choco windows-sdk-10.0
+      run: choco install windows-sdk-10.0
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
