@@ -1,10 +1,12 @@
-name: MSBuild
+name: MSBuild solution
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    #tags:
+      #- v*
+  release:
+    types: [created, released, published]
+  workflow_dispatch:
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -17,23 +19,43 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-      
-    - name: Install Windows SDK 10.0.18362.0 
-      run: choco install windows-sdk-10.0
+      uses: microsoft/setup-msbuild@v1.1
+      # Was using v1.0.2
+      #with:
+      #  vs-version: '[16.11,17.1)'
 
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+    #- name: Restore NuGet packages
+      #working-directory: ${{env.GITHUB_WORKSPACE}}
+      #run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      
+    #- run: mkdir -p Release
+    #- run: echo hello > Release/world.txt
+
+  #  - name: Upload build artifacts
+  #    uses: actions/upload-artifact@v2
+  #    with:
+  #      name: USSUpdater
+  #      path: D:\a\USS-Updater\USS-Updater\x64\Release\USS Updater.exe
+  #      #path: Release/*.exe
+      
+  #download-artifacts:
+    #runs-on: windows-2022
+    #needs: [build]
+    
+    #steps:
+    #- name: Download build artifacts
+      #uses: actions/download-artifact@v2
+      #with:
+        #name: Executable
