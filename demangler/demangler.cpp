@@ -50,7 +50,7 @@ bool GetDLLFileExports(const char *szFileName, std::vector<std::string>&pszFunct
 	PIMAGE_NT_HEADERS pImg_NT_Header;
 	PIMAGE_EXPORT_DIRECTORY pImg_Export_Dir;
 
-	hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	hFile = CreateFileA(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (hFile == INVALID_HANDLE_VALUE) {
 		return false;
